@@ -17,14 +17,26 @@ const app = express()
 
 app.use(express.json())
 
-// app.get('/auth/me', (req, res) => {
-//     try {
+app.get('/auth/me', checkAuth, async (req, res) => {
+    try {
+        const user = await UserModel.findById(req.userId)
 
-//     } catch (err) {
-//         console.log(err);
+        if (!user) {
+            return res.status(404).json({
+                message: 'Пользователь не найден'
+            })
+        }
 
-//     }
-// })
+        const { passwordHash, ...userData } = user._doc
+
+        res.json(userData)
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: 'Нет доступа',
+        })
+    }
+})
 
 app.post('/auth/login', registerValidation, async (req, res) => {
     try {
@@ -55,7 +67,7 @@ app.post('/auth/login', registerValidation, async (req, res) => {
         )
 
         const { passwordHash, ...userData } = user._doc
-        
+
         res.json({
             ...userData,
             token,
