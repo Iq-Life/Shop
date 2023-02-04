@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Iq-Life/Shop#readme",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "express": "^4.18.2",
     "express-validator": "^6.14.3",
     "jsonwebtoken": "^9.0.0",
